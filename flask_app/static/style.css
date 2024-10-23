@@ -1,0 +1,23 @@
+.card-custom {
+    max-width: 60%;
+}
+
+/* .custom-flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dashboard-column {
+    box-sizing: border-box;
+    max-width: 50%;
+} */
+
+.dashboard-col {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-card {
+    width: 100%
+}

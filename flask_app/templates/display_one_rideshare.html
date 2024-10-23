@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>View Rideshare</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4">
+        <div class="container-fluid">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rides/dashboard">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-body">
+                <h1 class="card-title">Ready for your trip to {{ rideshare.destination }}?</h1>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Who's driving?</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{'You' if rideshare.driver_id == session.logged_in_user_id else rideshare.driver.first_name }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Who's coming along?</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{'You' if rideshare.rider_id == session.logged_in_user_id else rideshare.rider.first_name }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Date:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ rideshare.date|format_date }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Pickup Location:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ rideshare.pickup_loc }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Details:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ rideshare.details }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <a href="/rides/edit/{{ rideshare.id }}">Edit</a> | <a href="/rides/delete/{{ rideshare.id }}">Delete</a>
+                    </div>
+                    <div class="col-6">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="div">
+            <div class="mb-4">
+                <h3>Ride messages</h3>
+                {% for message in messages %}
+                    {% if rideshare.id == message.rideshares_id %}
+                        <div class="row">
+                            <div class="col-3">{{ message.sender.first_name }}</div>
+                            <div class="col-9">{{ message.content }}</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <form action="/messages/create" method="post">
+                <input type="hidden" name="rideshare_id" id="rideshare_id" value="{{ rideshare.id }}">
+                <input type="hidden" name="user_id" id="user_id" value="{{ session.logged_in_user_id }}">
+                <div class="form-floating mb-3">
+                            <textarea name="content" id="content" class="form-control" placeholder="Message"></textarea>
+                            <label for="details">Message:</label>
+                </div>
+                <div class="text-end"><input type="submit" value="Send message" class="btn btn-primary"></div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
